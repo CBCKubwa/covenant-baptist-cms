@@ -1,0 +1,309 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  MEDIA_MANAGER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Admin {
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String
+  role      String     @default("ADMIN")
+  logs      AuditLog[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  content   String   @db.Text
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  timestamp DateTime @default(now())
+}
+
+model Speaker {
+  id      String   @id @default(cuid())
+  name    String
+  title   String?
+  bio     String?
+  photo   String?
+  sermons Sermon[]
+}
+
+model Sermon {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  speakerId   String
+  speaker     Speaker   @relation(fields: [speakerId], references: [id])
+  scripture   String
+  category    String?
+  description String?
+  thumbnail   String?
+  audioUrl    String?
+  videoUrl    String?
+  youtubeUrl  String?
+  transcript  String?
+  keyPoints   String[]
+  quote       String?
+  question    String?
+  prayer      String?
+  date        DateTime?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([publishedAt])
+  @@index([category])
+  @@index([speakerId])
+}
+
+model DailyWord {
+  id        String   @id @default(cuid())
+  date      DateTime @unique
+  quote     String
+  quoteBy   String?
+  question  String
+  prayer    String
+  scripture String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
+
+model Devotional {
+  id         String   @id @default(uuid())
+  date       DateTime @unique
+  title      String
+  scripture  String
+  text       String   @db.Text
+  reflection String?  @db.Text
+  prayer     String?  @db.Text
+  author     String?
+  imageUrl   String?
+  audioUrl   String?
+  status     String   @default("DRAFT")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Event {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  startsAt        DateTime
+  endsAt          DateTime?
+  startTime       String?
+  endTime         String?
+  location        String?
+  description     String?   @db.Text
+  image           String?
+  imageUrl        String?
+  registrationUrl String?
+  department      String?
+  category        String?
+  contactInfo     String?
+  isRecurring     Boolean   @default(false)
+  status          String    @default("PUBLISHED")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([startsAt])
+}
+
+model WeeklyActivity {
+  id          String @id @default(uuid())
+  name        String
+  dayOfWeek   String
+  time        String
+  description String?
+  location    String?
+  status      String @default("PUBLISHED")
+  order       Int    @default(0)
+}
+
+model Ministry {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  mission     String?  @db.Text
+  leadership  String?
+  schedule    String?
+  contactInfo String?
+  image       String?
+  videoUrl    String?
+  order       Int      @default(0)
+  status      String   @default("PUBLISHED")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  author        String?
+  featuredImage String?
+  content       String    @db.Text
+  category      String?
+  tags          String[]
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+}
+
+model Album {
+  id          String   @id @default(cuid())
+  title       String
+  date        DateTime?
+  description String?
+  coverImage  String?
+  status      String   @default("PUBLISHED")
+  photos      Photo[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Photo {
+  id      String  @id @default(cuid())
+  albumId String
+  album   Album   @relation(fields: [albumId], references: [id])
+  url     String
+  caption String?
+  order   Int     @default(0)
+}
+
+model Video {
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  thumbnail String?
+  createdAt DateTime @default(now())
+}
+
+model Resource {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  fileUrl     String
+  fileType    String
+  category    String?
+  department  String?
+  isPublic    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  status      String   @default("PUBLISHED")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+  id          String    @id @default(uuid())
+  title       String
+  content     String    @db.Text
+  imageUrl    String?
+  documentUrl String?
+  linkUrl     String?
+  expiryDate  DateTime?
+  status      String    @default("PUBLISHED")
+  createdAt   DateTime  @default(now())
+}
+
+model PrayerRequest {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  phone     String?
+  request   String   @db.Text
+  isPrivate Boolean  @default(true)
+  status    String   @default("UNREAD")
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  status    String   @default("UNREAD")
+  createdAt DateTime @default(now())
+}
+
+model FormSubmission {
+  id        String   @id @default(uuid())
+  type      String
+  name      String?
+  email     String?
+  phone     String?
+  message   String   @db.Text
+  status    String   @default("UNREAD")
+  createdAt DateTime @default(now())
+}
+
+model ServiceTime {
+  id    String @id @default(cuid())
+  label String
+  day   String
+  time  String
+  order Int    @default(0)
+}
+
+model SocialLink {
+  id       String @id @default(cuid())
+  platform String
+  url      String
+}
+
+model SiteSettings {
+  id               String   @id @default("singleton")
+  churchName       String   @default("Covenant Baptist Church")
+  address          String?
+  googleMapsUrl    String?
+  phone            String?
+  whatsapp         String?
+  email            String?
+  website          String?
+  facebook         String?
+  instagram        String?
+  youtube          String?
+  visionShort      String?
+  visionFull       String?
+  missionStatement String?
+  description      String?  @db.Text
+  whoWeAre         String?  @db.Text
+  ourStory         String?  @db.Text
+  history          String?  @db.Text
+  coreValues       String?  @db.Text
+  statementOfFaith String?  @db.Text
+  officeHours      String?
+
+  heroTitle      String?
+  heroSubtitle   String?
+  heroImageUrl   String?
+  welcomeMessage String?  @db.Text
+
+  updatedAt DateTime @updatedAt
+}
