@@ -135,14 +135,14 @@ model Event {
 }
 
 model WeeklyActivity {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   dayOfWeek   String
   time        String
   description String?
   location    String?
-  status      String @default("PUBLISHED")
-  order       Int    @default(0)
+  status      String  @default("PUBLISHED")
+  order       Int     @default(0)
 }
 
 model Ministry {
@@ -176,15 +176,15 @@ model Article {
 }
 
 model Album {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   date        DateTime?
   description String?
   coverImage  String?
-  status      String   @default("PUBLISHED")
+  status      String    @default("PUBLISHED")
   photos      Photo[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Photo {
@@ -280,6 +280,7 @@ model SocialLink {
 model SiteSettings {
   id               String   @id @default("singleton")
   churchName       String   @default("Covenant Baptist Church")
+  logoUrl          String?
   address          String?
   googleMapsUrl    String?
   phone            String?
@@ -300,10 +301,10 @@ model SiteSettings {
   statementOfFaith String?  @db.Text
   officeHours      String?
 
-  heroTitle      String?
-  heroSubtitle   String?
-  heroImageUrl   String?
-  welcomeMessage String?  @db.Text
+  heroTitle        String?
+  heroSubtitle     String?
+  heroImageUrl     String?
+  welcomeMessage   String?  @db.Text
 
   updatedAt DateTime @updatedAt
 }

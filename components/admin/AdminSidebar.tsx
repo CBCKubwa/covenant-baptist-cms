@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
 type Item = { label: string; href: string | null };
 type Group = { label: string; items: Item[] };
@@ -40,13 +41,23 @@ const GROUPS: Group[] = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const [logoUrl, setLogoUrl] = useState("/cbc-logo.png");
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.logoUrl) setLogoUrl(data.logoUrl);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <aside className="w-full md:w-[220px] shrink-0 bg-midnight text-parchment/70 p-5">
       <Link href="/admin" className="flex items-center gap-2.5 mb-6">
         <img 
-          src="/cbc-logo.png" 
-          alt="Covenant Baptist Church Logo" 
+          src={logoUrl} 
+          alt="Church Logo" 
           className="w-8 h-8 object-contain shrink-0" 
         />
         <span className="text-[13px] font-semibold text-parchment">Admin</span>
