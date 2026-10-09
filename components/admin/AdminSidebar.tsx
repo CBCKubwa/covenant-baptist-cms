@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 
 type Item = { label: string; href: string | null };
 type Group = { label: string; items: Item[] };
@@ -45,13 +44,11 @@ export default function AdminSidebar() {
   return (
     <aside className="w-full md:w-[220px] shrink-0 bg-midnight text-parchment/70 p-5">
       <Link href="/admin" className="flex items-center gap-2.5 mb-6">
-        <span className="relative w-6 h-6 rounded-full overflow-hidden shrink-0">
-       <img 
-  src="/cbc-logo.png" 
-  alt="Covenant Baptist Church Logo" 
-  className="w-10 h-10 object-contain" 
-/>
-        </span>
+        <img 
+          src="/cbc-logo.png" 
+          alt="Covenant Baptist Church Logo" 
+          className="w-8 h-8 object-contain shrink-0" 
+        />
         <span className="text-[13px] font-semibold text-parchment">Admin</span>
       </Link>
       {GROUPS.map((group) => (
