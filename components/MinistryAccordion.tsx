@@ -27,7 +27,7 @@ export default function MinistryAccordion({ ministry }: { ministry: Ministry }) 
             <div className="relative aspect-[16/9] rounded-sm overflow-hidden -mx-6 sm:mx-0 sm:mt-4">
               <Image
                 src={ministry.image}
-                alt={`${ministry.name} at Covenant Baptist Church`}
+                alt={ministry.name}
                 fill
                 sizes="(min-width: 820px) 780px, 100vw"
                 className="object-cover object-[center_28%]"

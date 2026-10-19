@@ -1,6 +1,7 @@
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
-import { getSiteSettings, resolveLogo } from "@/lib/settings";
+import { getSiteSettings, resolveContact, resolveLogo } from "@/lib/settings";
+import { resolveCopyright, resolveIdentity, resolveNav } from "@/lib/site-content";
 
 // Pages are cached for a minute and instantly refreshed whenever the admin
 // saves or deletes something (the admin APIs call revalidatePath).
@@ -9,6 +10,8 @@ export const revalidate = 60;
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   // Logo + contact details are editable from Admin -> Church Info.
   const settings = await getSiteSettings();
+  const menu = resolveNav(settings); // menu labels (Admin -> Menu & Footer)
+  const identity = resolveIdentity(settings); // church name + location line
 
   return (
     <>
@@ -18,13 +21,22 @@ export default async function MarketingLayout({ children }: { children: React.Re
       >
         Skip to content
       </a>
-      <SiteHeader logoUrl={resolveLogo(settings)} />
+      <SiteHeader
+        logoUrl={resolveLogo(settings)}
+        navItems={menu.items}
+        ctaLabel={menu.ctaLabel}
+        churchName={identity.name}
+        churchLocation={identity.location}
+      />
       <main id="main">{children}</main>
       <Footer
         logoUrl={resolveLogo(settings)}
-        address={settings?.address}
-        phone={settings?.phone}
-        whatsapp={settings?.whatsapp}
+        contact={resolveContact(settings)}
+        vision={settings?.visionFull}
+        navItems={menu.items}
+        prayerLabel={menu.prayerLabel}
+        copyright={resolveCopyright(settings)}
+        churchName={identity.name}
       />
     </>
   );

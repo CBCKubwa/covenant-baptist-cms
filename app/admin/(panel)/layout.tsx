@@ -3,6 +3,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import { getAdminSession } from "@/lib/auth";
 import { getSiteSettings, resolveLogo } from "@/lib/settings";
 import { prisma } from "@/lib/prisma";
+import { resolveIdentity } from "@/lib/site-content";
 
 /**
  * Shell for every signed-in admin screen. The session is checked here as well as
@@ -28,7 +29,7 @@ export default async function AdminPanelLayout({ children }: { children: React.R
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#FAFAF7]">
-      <AdminSidebar logoUrl={resolveLogo(settings)} userName={session.user.name ?? "Admin"} unread={unread} />
+      <AdminSidebar logoUrl={resolveLogo(settings)} userName={session.user.name ?? "Admin"} churchName={resolveIdentity(settings).name} unread={unread} />
       <main className="flex-1 min-w-0 p-6 md:p-10">{children}</main>
     </div>
   );

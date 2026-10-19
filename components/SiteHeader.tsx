@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SiteLogo from "@/components/SiteLogo";
 import Link from "next/link";
-import { nav } from "@/lib/content";
+import { church, menuDefaults, nav as defaultNav } from "@/lib/content";
 
 /**
  * Fixed top navigation bar for the public site.
@@ -13,7 +13,22 @@ import { nav } from "@/lib/content";
  * BUG FIX: this used to load "/logo.jpg", a file that does not exist in /public,
  * which is why the logo was blank on Vercel. The real file is /cbc-logo.png.
  */
-export default function SiteHeader({ logoUrl }: { logoUrl?: string | null }) {
+export default function SiteHeader({
+  logoUrl,
+  navItems = defaultNav,
+  ctaLabel = menuDefaults.ctaLabel,
+  churchName = church.name,
+  churchLocation = church.location,
+}: {
+  logoUrl?: string | null;
+  /** Menu links with the admin's labels applied (Admin -> Menu & Footer). */
+  navItems?: { label: string; href: string }[];
+  /** Text of the gold button on the right. */
+  ctaLabel?: string;
+  /** Name + location line beside the logo (Admin -> Church Info & Logo). */
+  churchName?: string;
+  churchLocation?: string;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -39,17 +54,17 @@ export default function SiteHeader({ logoUrl }: { logoUrl?: string | null }) {
         }`}
       >
         <Link href="/" className="flex items-center gap-3 text-parchment">
-          <SiteLogo src={logoUrl} size={40} priority className="shrink-0" />
+          <SiteLogo src={logoUrl} size={40} priority className="shrink-0" alt={`${churchName} logo`} />
           <span className="font-serif text-sm leading-tight">
-            Covenant Baptist Church
+            {churchName}
             <small className="block font-sans text-[9.5px] tracking-[0.16em] text-gold-light font-semibold mt-0.5">
-              Byazhin-Kubwa, Abuja
+              {churchLocation}
             </small>
           </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden md:flex items-center gap-6">
-          {nav.map((item) =>
+          {navItems.map((item) =>
             item.href.startsWith("#") ? (
               <a
                 key={item.href}
@@ -74,7 +89,7 @@ export default function SiteHeader({ logoUrl }: { logoUrl?: string | null }) {
           href="/visit"
           className="hidden md:inline-block px-5 py-2.5 rounded border border-gold text-gold-light text-xs font-semibold tracking-wide hover:bg-gold hover:text-navy transition active:scale-95"
         >
-          Plan Your Visit
+          {ctaLabel}
         </Link>
 
         <button
@@ -110,7 +125,7 @@ export default function SiteHeader({ logoUrl }: { logoUrl?: string | null }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
           >
-            {nav.map((item, i) =>
+            {navItems.map((item, i) =>
               item.href.startsWith("#") ? (
                 <motion.a
                   key={item.href}
@@ -139,14 +154,14 @@ export default function SiteHeader({ logoUrl }: { logoUrl?: string | null }) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.06 + nav.length * 0.05, duration: 0.4 }}
+              transition={{ delay: 0.06 + navItems.length * 0.05, duration: 0.4 }}
             >
               <Link
                 href="/visit"
                 onClick={() => setOpen(false)}
                 className="inline-block mt-2 px-8 py-3 rounded bg-gold text-navy font-sans font-bold text-sm tracking-wide"
               >
-                Plan Your Visit
+                {ctaLabel}
               </Link>
             </motion.div>
           </motion.div>

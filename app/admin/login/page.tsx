@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import LoginForm from "@/components/admin/LoginForm";
 import { getAdminSession } from "@/lib/auth";
 import { getSiteSettings, resolveLogo } from "@/lib/settings";
+import { resolveIdentity } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
 
@@ -9,5 +10,6 @@ export const dynamic = "force-dynamic";
 export default async function LoginPage() {
   if (await getAdminSession()) redirect("/admin");
   const settings = await getSiteSettings();
-  return <LoginForm logoUrl={resolveLogo(settings)} />;
+  const identity = resolveIdentity(settings);
+  return <LoginForm logoUrl={resolveLogo(settings)} churchName={identity.name} churchLocation={identity.location} />;
 }

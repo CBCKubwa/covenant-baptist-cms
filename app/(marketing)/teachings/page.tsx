@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import SermonCard from "@/components/SermonCard";
@@ -7,10 +7,8 @@ import { getPublishedSermons } from "@/lib/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Teachings | Covenant Baptist Church",
-  description: "Browse sermons from Covenant Baptist Church by speaker, scripture, category, and year.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/teachings");
 
 export default async function TeachingsPage() {
   // null = database unreachable -> show the built-in sample sermon instead of an error.

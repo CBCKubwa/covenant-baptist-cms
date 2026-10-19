@@ -24,6 +24,36 @@ export const church = {
   missionRef: "Ephesians 5:27",
 };
 
+// Built-in wording / images for the parts of the site the admin can now change
+// (Admin -> Pages, Menu & Footer, Church Info). Each is used until the admin saves their own.
+export const heroDefaults = {
+  title: church.name,
+  tagline: church.location,
+  subtitle: church.visionShort,
+  primaryLabel: "Plan Your Visit",
+  secondaryLabel: "Watch a Sermon",
+  image: "/church-building.jpg",
+};
+
+export const pastorDefaults = {
+  name: "Rev\u2019d Dr. Fajinmi Adetunji Matthew",
+  title: "",
+  photo: "/pastor.jpg",
+};
+
+/** Labels for the two menu items that are not in `nav`: the header button and the footer prayer link. */
+export const menuDefaults = {
+  ctaLabel: "Plan Your Visit",
+  prayerLabel: "Prayer Requests",
+};
+
+/** Placeholders are filled in automatically: {year} = current year, {name} = church name, {location} = location line. */
+export const footerDefaults = {
+  copyright: "\u00A9 {year} {name}, {location}. All rights reserved.",
+};
+
+export const FAVICON_DEFAULT = "/favicon.jpg";
+
 // Sample Weekly Word, shown only if the database cannot be reached.
 export const weeklyWordSample = {
   weekLabel: "",

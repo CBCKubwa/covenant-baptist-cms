@@ -11,8 +11,8 @@ export type WeeklyWordData = {
 };
 
 /** Homepage section: the quote, question and prayer for the current week. */
-export default function WeeklyWord({ word }: { word: WeeklyWordData }) {
-  const shareText = `\u201C${word.quote}\u201D${word.quoteBy ? ` \u2014 ${word.quoteBy}` : ""}, ${church.name}`;
+export default function WeeklyWord({ word, churchName = church.name }: { word: WeeklyWordData; churchName?: string }) {
+  const shareText = `\u201C${word.quote}\u201D${word.quoteBy ? ` \u2014 ${word.quoteBy}` : ""}, ${churchName}`;
   const waHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 
   return (

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 // Applies to every /admin page (including the login screen): keep them out of Google.
 export const metadata: Metadata = {
-  title: "Admin | Covenant Baptist Church",
+  title: "Admin", // the church name is added by the site-wide title template
   robots: { index: false, follow: false },
 };
 

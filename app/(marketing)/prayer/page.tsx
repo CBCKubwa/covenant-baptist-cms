@@ -1,13 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import PrayerForm from "@/components/PrayerForm";
 import { ShieldCheck } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Prayer Requests | Covenant Baptist Church",
-  description: "Share a prayer request with Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/prayer");
 
 export default function PrayerPage() {
   return (

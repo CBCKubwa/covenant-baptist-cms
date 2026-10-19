@@ -30,8 +30,10 @@ To **change the admin password later**: edit `ADMIN_PASSWORD` in `.env` and run 
 ## 3. Using the admin (`/admin`)
 | Task | Where |
 |---|---|
-| Change the church logo, address, phone, social links | **Church Info & Logo** |
-| Edit the Home / About / Visit page text and service times | **Pages** |
+| Change the **church name**, logo, browser-tab icon, address, phone, WhatsApp, email, social links | **Church Info & Logo** |
+| Homepage banner picture + wording, pastor's name and photo, Home / About / Visit text, service times, Plan Your Visit photo | **Pages** |
+| Rename the menu items and change the footer copyright line (`{year}`, `{name}` and `{location}` are filled in automatically) | **Menu & Footer** |
+| Change the title and description Google shows for each page (and the preview when a link is shared on WhatsApp/Facebook) | **Search Appearance** |
 | Add / delete sermons (with audio & video) | **Sermons** |
 | Schedule the **Weekly Word** (quote, question, prayer — one per week, Mon–Sun) | **Weekly Word** |
 | Add / delete events (shown on the public Events page until their date passes) | **Events** |

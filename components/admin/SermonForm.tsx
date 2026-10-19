@@ -14,15 +14,12 @@ type FormState = {
   date: string;
   youtubeUrl: string;
   description: string;
-  quote: string;
-  question: string;
-  prayer: string;
 };
 
 const EMPTY: FormState = {
   title: "", speakerName: "", scripture: "", category: "",
   date: new Date().toISOString().slice(0, 10),
-  youtubeUrl: "", description: "", quote: "", question: "", prayer: "",
+  youtubeUrl: "", description: "",
 };
 
 /**
@@ -81,9 +78,6 @@ export default function SermonForm() {
       </div>
       <FormField label="Or paste a YouTube link" value={form.youtubeUrl} onChange={update("youtubeUrl")} type="url" placeholder="https://www.youtube.com/watch?v=..." />
 
-      <FormField label="Quote of the week" value={form.quote} onChange={update("quote")} textarea />
-      <FormField label="Question of the week" value={form.question} onChange={update("question")} textarea />
-      <FormField label="Prayer of the week" value={form.prayer} onChange={update("prayer")} textarea />
 
       <button
         type="submit"

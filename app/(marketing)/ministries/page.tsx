@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import MinistryAccordion from "@/components/MinistryAccordion";
@@ -8,10 +8,8 @@ import { parseSections } from "@/lib/validation";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Ministries | Covenant Baptist Church",
-  description: "Ministries and ways to get involved at Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/ministries");
 
 export default async function MinistriesPage() {
   const rows = await getPublishedMinistries();

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import EventCard from "@/components/EventCard";
@@ -6,10 +6,8 @@ import { getUpcomingEvents } from "@/lib/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Events | Covenant Baptist Church",
-  description: "Upcoming events at Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/events");
 
 export default async function EventsPage() {
   // null = database unreachable -> show the sample event; [] = nothing scheduled.

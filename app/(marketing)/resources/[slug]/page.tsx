@@ -12,9 +12,9 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  if (!article) return { title: "Article | Covenant Baptist Church" };
+  if (!article) return { title: "Article" };
   return {
-    title: `${article.title} | Covenant Baptist Church`,
+    title: article.title, // the church name is added automatically by the site-wide title template
     description: article.content.replace(/\s+/g, " ").slice(0, 155),
   };
 }

@@ -2,12 +2,11 @@
 
 import { useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
-import { church } from "@/lib/content";
 
 const inputCls = "w-full border border-navy/15 rounded-md px-4 py-3 text-sm text-ink focus:outline-none focus:border-gold";
 
 /** Contact form. Messages are saved to the database and appear in Admin -> Messages. */
-export default function ContactForm() {
+export default function ContactForm({ whatsapp }: { whatsapp: string }) {
   const [form, setForm] = useState({ name: "", email: "", message: "", website: "" }); // `website` = hidden spam trap
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState("");
@@ -39,7 +38,7 @@ export default function ContactForm() {
           Your message has been received and someone will get back to you. If it&rsquo;s urgent, you can also reach us on WhatsApp.
         </p>
         <a
-          href={`https://wa.me/${church.whatsapp}`}
+          href={`https://wa.me/${whatsapp}`}
           target="_blank"
           rel="noopener"
           className="inline-flex items-center mt-5 px-6 py-3 rounded bg-navy text-parchment text-xs font-bold tracking-wide uppercase"

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
@@ -8,10 +8,8 @@ import { getPublishedArticles } from "@/lib/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Resources | Covenant Baptist Church",
-  description: "Articles and devotional content from Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/resources");
 
 /** First ~160 characters of the article, cut at a word boundary. */
 function excerpt(text: string) {

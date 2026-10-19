@@ -35,7 +35,7 @@ export default function AdminPageHeader({
 export function DbError() {
   return (
     <div role="alert" className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-      Could not load data from the database. Check that <code>DATABASE_URL</code> is set correctly, then refresh.
+      Could not load data from the database. Check that <code>DATABASE_URL</code> is set correctly. If you just updated the site, run <code>npm run db:push</code> on your computer to update the database tables, then refresh.
     </div>
   );
 }

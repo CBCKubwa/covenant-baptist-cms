@@ -39,6 +39,97 @@ Removed unused `components/Navbar.tsx`, duplicate `components/AdminSidebar.tsx`,
 - **Public Events** page now shows admin-created events (until their date passes); removed the fake image-upload box from the event form.
 - **Login rate-limiting** (5 wrong attempts per username / 20 per IP per 15 minutes), with a clear message on the login screen.
 
+## Final audit — does everything saved in the admin show on the public site?
+Every admin field was traced to the public page that displays it. Gaps found and fixed in this pass:
+- **Service times** (saved but the homepage strip was hard-coded) → now shown on the homepage and Visit page.
+- **Contact page** ignored the edited address / phone / WhatsApp → now reads them. One shared helper (`resolveContact`) now feeds the footer, Contact, Visit and homepage strip, so an edit shows everywhere at once.
+- **Email, Facebook, YouTube, Instagram** were saved but displayed nowhere → now in the footer and on the Contact page.
+- **Vision / Mission** edits still printed the old Bible-verse citation underneath → the citation now only appears with the built-in wording.
+- **Footer vision text** ignored edits → now follows Admin → Pages.
+- **Sermon form** had three fields (quote / question / prayer) that were never displayed anywhere → removed (the Weekly Word covers this).
+- **Plan Your Visit photo** → editable (Admin → Pages).
+- Links and email saved in Church Info are now validated (a `javascript:` link can no longer be stored).
+
+Automated scans (all clean): every admin API route checks the session; every route that changes data refreshes the public site; every page that reads the database is cached for at most 60 seconds; no unused components; no leftover debug code.
+
+### Round 3 — the last hard-coded items are now editable
+- **Homepage banner:** picture, headline, line under it, sentence, and both button labels (Admin → Pages).
+- **Pastor** on the About page: name, optional title, and photo (Admin → Pages).
+- **Menu labels:** every menu item, the gold header button, and the footer prayer link (Admin → Menu & Footer). The pages they open never change; labels are limited to 30 characters.
+- **Footer copyright line** (Admin → Menu & Footer). `{year}` always shows the current year — the old line had "2026" typed in and would have gone stale.
+- **Browser-tab icon** (Admin → Church Info & Logo). The old `app/icon.jpg` file was moved to `public/favicon.jpg`, because a file in `/app` always wins and the icon could never have been changed from the admin.
+- The hidden search-engine data (address and phone that Google reads) now follows the contact details you edit.
+- The logic that picks "admin's value or default" lives in one tested file (`lib/site-content.ts`). Re-run `npm run db:push` for the new columns.
+
+### Round 4 — church name and search-engine text
+- **Church name + location line** (Admin → Church Info & Logo) now drive the header, footer, login page, admin sidebar, banner headline, copyright line, weekly-word share text, About heading, image descriptions and the hidden search-engine data. Clearing the name restores the built-in one (the database column is required, so a blank is never saved).
+- **Search Appearance** (new admin page): title + description for all 10 public pages, with a Google-style preview and length guidance. Empty boxes keep using the built-in text, which follows the church name automatically.
+- **Bug fixed:** every page title had the church name twice ("Teachings | Covenant Baptist Church | Covenant Baptist Church") because the site adds it automatically *and* each page typed it in. Now it appears once, and a title the admin types is used exactly as typed.
+- Link previews (WhatsApp / Facebook) now show each page's own title and description instead of the homepage's.
+- The admin sidebar no longer cuts off a long church name.
+
+### Still in code (not in the admin)
+The long-form wording inside pages other than what is listed above (for example the section headings on the About page and the tips on the Visit page), the colours, and the visual design. Search engines also need your real web address to index the site; add a sitemap later if you want faster indexing.
+
+## Round 2 — the remaining items, now finished
+- **Weekly Word** replaces the Daily Word everywhere (admin, API, homepage, sermon-form labels). One entry per week (Mon–Sun); the site switches at Monday 00:00 Nigerian time; if a week is skipped, the latest entry stays up. The existing database table is kept (no data loss).
+- **Contact and Prayer forms** now save to the database, with a spam trap, email check and rate limit. **Messages** and **Prayer Requests** admin pages list them (unread highlighted, mark read/unread, delete) with unread badges in the sidebar and on the dashboard.
+- **Articles** — create, edit, delete (with image upload); public Resources page and a reading page per article (plain-text rendering, so it is safe).
+- **Ministries** — create, edit, reorder, delete (with photo upload); the public page reads them. Your seven existing ministries are carried over by `npm run db:seed`.
+- **Pages** — Home intro, About intro/vision/mission, Visit text and **service times** are editable and live.
+- **Public Events** page now shows admin-created events (until their date passes); removed the fake image-upload box from the event form.
+- **Login rate-limiting** (5 wrong attempts per username / 20 per IP per 15 minutes), with a clear message on the login screen.
+
+## Final audit — does everything saved in the admin show on the public site?
+Every admin field was traced to the public page that displays it. Gaps found and fixed in this pass:
+- **Service times** (saved but the homepage strip was hard-coded) → now shown on the homepage and Visit page.
+- **Contact page** ignored the edited address / phone / WhatsApp → now reads them. One shared helper (`resolveContact`) now feeds the footer, Contact, Visit and homepage strip, so an edit shows everywhere at once.
+- **Email, Facebook, YouTube, Instagram** were saved but displayed nowhere → now in the footer and on the Contact page.
+- **Vision / Mission** edits still printed the old Bible-verse citation underneath → the citation now only appears with the built-in wording.
+- **Footer vision text** ignored edits → now follows Admin → Pages.
+- **Sermon form** had three fields (quote / question / prayer) that were never displayed anywhere → removed (the Weekly Word covers this).
+- **Plan Your Visit photo** → editable (Admin → Pages).
+- Links and email saved in Church Info are now validated (a `javascript:` link can no longer be stored).
+
+Automated scans (all clean): every admin API route checks the session; every route that changes data refreshes the public site; every page that reads the database is cached for at most 60 seconds; no unused components; no leftover debug code.
+
+### Round 3 — the last hard-coded items are now editable
+- **Homepage banner:** picture, headline, line under it, sentence, and both button labels (Admin → Pages).
+- **Pastor** on the About page: name, optional title, and photo (Admin → Pages).
+- **Menu labels:** every menu item, the gold header button, and the footer prayer link (Admin → Menu & Footer). The pages they open never change; labels are limited to 30 characters.
+- **Footer copyright line** (Admin → Menu & Footer). `{year}` always shows the current year — the old line had "2026" typed in and would have gone stale.
+- **Browser-tab icon** (Admin → Church Info & Logo). The old `app/icon.jpg` file was moved to `public/favicon.jpg`, because a file in `/app` always wins and the icon could never have been changed from the admin.
+- The hidden search-engine data (address and phone that Google reads) now follows the contact details you edit.
+- The logic that picks "admin's value or default" lives in one tested file (`lib/site-content.ts`). Re-run `npm run db:push` for the new columns.
+
+### Still in code (not in the admin)
+The church name written next to the logo in the header/footer, and the page titles/descriptions search engines show.
+
+## Round 2 — the remaining items, now finished
+- **Weekly Word** replaces the Daily Word everywhere (admin, API, homepage, sermon-form labels). One entry per week (Mon–Sun); the site switches at Monday 00:00 Nigerian time; if a week is skipped, the latest entry stays up. The existing database table is kept (no data loss).
+- **Contact and Prayer forms** now save to the database, with a spam trap, email check and rate limit. **Messages** and **Prayer Requests** admin pages list them (unread highlighted, mark read/unread, delete) with unread badges in the sidebar and on the dashboard.
+- **Articles** — create, edit, delete (with image upload); public Resources page and a reading page per article (plain-text rendering, so it is safe).
+- **Ministries** — create, edit, reorder, delete (with photo upload); the public page reads them. Your seven existing ministries are carried over by `npm run db:seed`.
+- **Pages** — Home intro, About intro/vision/mission, Visit text and **service times** are editable and live.
+- **Public Events** page now shows admin-created events (until their date passes); removed the fake image-upload box from the event form.
+- **Login rate-limiting** (5 wrong attempts per username / 20 per IP per 15 minutes), with a clear message on the login screen.
+
+## Final audit — does everything saved in the admin show on the public site?
+Every admin field was traced to the public page that displays it. Gaps found and fixed in this pass:
+- **Service times** (saved but the homepage strip was hard-coded) → now shown on the homepage and Visit page.
+- **Contact page** ignored the edited address / phone / WhatsApp → now reads them. One shared helper (`resolveContact`) now feeds the footer, Contact, Visit and homepage strip, so an edit shows everywhere at once.
+- **Email, Facebook, YouTube, Instagram** were saved but displayed nowhere → now in the footer and on the Contact page.
+- **Vision / Mission** edits still printed the old Bible-verse citation underneath → the citation now only appears with the built-in wording.
+- **Footer vision text** ignored edits → now follows Admin → Pages.
+- **Sermon form** had three fields (quote / question / prayer) that were never displayed anywhere → removed (the Weekly Word covers this).
+- **Plan Your Visit photo** → editable (Admin → Pages).
+- Links and email saved in Church Info are now validated (a `javascript:` link can no longer be stored).
+
+Automated scans (all clean): every admin API route checks the session; every route that changes data refreshes the public site; every page that reads the database is cached for at most 60 seconds; no unused components; no leftover debug code.
+
+### Still edited in code, not in the admin
+Homepage banner picture and wording, the pastor's name and photo (About → Leadership), the menu labels, the footer copyright line, and the browser-tab icon.
+
 ## Heads-up about behaviour
 - Once the database is reachable, the public site shows **database content only**. Run `npm run db:seed` once to carry over the sample sermon, "Church Life" album and the seven ministries. The sample "Children's Christmas Carol" event is not seeded (its date was never confirmed) — add it under Events when ready.
 - Re-run `npm run db:push` after updating (new columns/tables for ministries, page text and rate limiting).

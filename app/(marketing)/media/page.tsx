@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import MediaTabs, { type AlbumView, type MediaView } from "@/components/MediaTabs";
@@ -7,10 +7,8 @@ import { getMediaItems, getPublishedAlbums } from "@/lib/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Media | Covenant Baptist Church",
-  description: "Photos, videos, and audio from Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/media");
 
 export default async function MediaPage() {
   const [dbAlbums, dbMedia] = await Promise.all([getPublishedAlbums(), getMediaItems()]);

@@ -12,7 +12,7 @@ import SiteLogo from "@/components/SiteLogo";
  * Split-screen sign-in: brand panel (desktop) + form.
  * The visual language (navy / gold / serif) matches the public website.
  */
-export default function LoginForm({ logoUrl }: { logoUrl: string }) {
+export default function LoginForm({ logoUrl, churchName, churchLocation }: { logoUrl: string; churchName: string; churchLocation: string }) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -72,10 +72,10 @@ export default function LoginForm({ logoUrl }: { logoUrl: string }) {
         />
 
         <div className="relative z-10 flex items-center gap-4">
-          <SiteLogo src={logoUrl} size={64} priority />
+          <SiteLogo src={logoUrl} size={64} priority alt={`${churchName} logo`} />
           <div className="leading-tight">
-            <div className="font-serif text-xl text-parchment">Covenant Baptist Church</div>
-            <div className="mt-1 text-[11px] font-semibold tracking-[0.2em] uppercase text-gold-light">Byazhin-Kubwa, Abuja</div>
+            <div className="font-serif text-xl text-parchment">{churchName}</div>
+            <div className="mt-1 text-[11px] font-semibold tracking-[0.2em] uppercase text-gold-light">{churchLocation}</div>
           </div>
         </div>
 
@@ -95,8 +95,8 @@ export default function LoginForm({ logoUrl }: { logoUrl: string }) {
         <div className="w-full max-w-[420px] mx-auto">
           {/* Logo is shown here only on small screens (the brand panel is hidden) */}
           <div className="lg:hidden flex flex-col items-center text-center mb-9">
-            <SiteLogo src={logoUrl} size={80} priority />
-            <div className="mt-4 font-serif text-xl text-navy">Covenant Baptist Church</div>
+            <SiteLogo src={logoUrl} size={80} priority alt={`${churchName} logo`} />
+            <div className="mt-4 font-serif text-xl text-navy">{churchName}</div>
           </div>
 
           <div className="mb-8 text-center lg:text-left">

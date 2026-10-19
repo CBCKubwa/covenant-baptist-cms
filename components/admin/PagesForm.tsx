@@ -6,16 +6,23 @@ import { Loader2 } from "lucide-react";
 import FormField from "./FormField";
 
 export type PagesFormValues = {
+  heroTitle: string;
+  heroTagline: string;
+  heroSubtitle: string;
+  heroPrimaryLabel: string;
+  heroSecondaryLabel: string;
   homeIntro: string;
   aboutIntro: string;
   visionFull: string;
   missionStatement: string;
+  pastorName: string;
+  pastorTitle: string;
   visitWhatToExpect: string;
   serviceTimes: string;
 };
 
 /**
- * Editable text blocks on the core pages. Saved into Site Settings; clearing a
+ * Editable text on the core pages (homepage banner, About, Plan Your Visit). Saved into Site Settings; clearing a
  * box and saving returns that block to the built-in wording.
  */
 export default function PagesForm({ initial }: { initial: PagesFormValues }) {
@@ -49,6 +56,16 @@ export default function PagesForm({ initial }: { initial: PagesFormValues }) {
     <form onSubmit={handleSubmit} className="bg-white border border-navy/10 rounded-md p-7 grid gap-7 max-w-[680px]">
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
 
+      <div className="grid gap-4">
+        <span className={heading}>Homepage banner</span>
+        <FormField label="Headline" value={form.heroTitle} onChange={update("heroTitle")} />
+        <FormField label="Line under the headline" value={form.heroTagline} onChange={update("heroTagline")} />
+        <FormField label="Banner sentence" value={form.heroSubtitle} onChange={update("heroSubtitle")} textarea />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="First button" value={form.heroPrimaryLabel} onChange={update("heroPrimaryLabel")} />
+          <FormField label="Second button" value={form.heroSecondaryLabel} onChange={update("heroSecondaryLabel")} />
+        </div>
+      </div>
       <div>
         <span className={heading}>Homepage</span>
         <FormField label="“Who We Are” paragraph" value={form.homeIntro} onChange={update("homeIntro")} textarea />
@@ -58,6 +75,10 @@ export default function PagesForm({ initial }: { initial: PagesFormValues }) {
         <FormField label="Page intro line" value={form.aboutIntro} onChange={update("aboutIntro")} textarea />
         <FormField label="Vision statement" value={form.visionFull} onChange={update("visionFull")} textarea />
         <FormField label="Mission statement" value={form.missionStatement} onChange={update("missionStatement")} textarea />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField label="Pastor's name" value={form.pastorName} onChange={update("pastorName")} />
+          <FormField label="Pastor's title (optional)" value={form.pastorTitle} onChange={update("pastorTitle")} placeholder="e.g. Senior Pastor" />
+        </div>
       </div>
       <div className="grid gap-4">
         <span className={heading}>Plan Your Visit</span>

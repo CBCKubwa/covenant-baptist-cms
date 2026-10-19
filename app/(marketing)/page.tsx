@@ -5,12 +5,14 @@ import WeeklyWord from "@/components/WeeklyWord";
 import FeaturedSermon from "@/components/FeaturedSermon";
 import { featuredSermon, weeklyWordSample } from "@/lib/content";
 import { getCurrentWeeklyWord, getPublishedSermons } from "@/lib/queries";
+import { getSiteSettings } from "@/lib/settings";
+import { resolveHero, resolveIdentity } from "@/lib/site-content";
 import { formatWeekRange } from "@/lib/week";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [latest, weekly] = await Promise.all([getPublishedSermons(1), getCurrentWeeklyWord()]);
+  const [latest, weekly, settings] = await Promise.all([getPublishedSermons(1), getCurrentWeeklyWord(), getSiteSettings()]);
 
   // Latest published sermon. null = database unreachable -> sample sermon; [] = none yet -> hide the block.
   const sermon =
@@ -25,10 +27,11 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
+      {/* Banner wording + picture come from Admin -> Pages */}
+      <Hero {...resolveHero(settings)} />
       <Intro />
       <SundayInfo />
-      {word && <WeeklyWord word={word} />}
+      {word && <WeeklyWord word={word} churchName={resolveIdentity(settings).name} />}
       {sermon && <FeaturedSermon sermon={sermon} />}
     </>
   );

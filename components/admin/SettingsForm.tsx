@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import FormField from "./FormField";
 
 type FormState = {
+  churchName: string;
+  churchLocation: string;
   address: string;
   phone: string;
   whatsapp: string;
@@ -47,7 +49,11 @@ export default function SettingsForm({ initial }: { initial: FormState }) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-navy/10 rounded-md p-7 grid gap-5 max-w-[560px]">
-      <h2 className="font-serif text-lg text-navy -mb-1">Contact details</h2>
+      <h2 className="font-serif text-lg text-navy -mb-1">Church name</h2>
+      <FormField label="Church name (shown beside the logo, in the footer, on the login page and in page titles)" value={form.churchName} onChange={update("churchName")} />
+      <FormField label="Line under the name (e.g. your area)" value={form.churchLocation} onChange={update("churchLocation")} />
+
+      <h2 className="font-serif text-lg text-navy -mb-1 mt-2">Contact details</h2>
       <FormField label="Address" value={form.address} onChange={update("address")} />
       <FormField label="Phone" value={form.phone} onChange={update("phone")} />
       <FormField label="WhatsApp number (digits only, with country code)" value={form.whatsapp} onChange={update("whatsapp")} placeholder="2347031375406" />

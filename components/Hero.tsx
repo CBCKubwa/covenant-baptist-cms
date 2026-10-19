@@ -4,7 +4,20 @@ import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Hero() {
+type HeroProps = {
+  title: string;
+  /** Small line under the headline (e.g. "Byazhin-Kubwa, Abuja") */
+  tagline: string;
+  subtitle: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+  imageSrc: string;
+  /** true = admin-uploaded picture, which is simply centred (the bundled one is cropped toward the sign) */
+  customImage: boolean;
+};
+
+/** Homepage banner. All wording and the picture come from Admin -> Pages (defaults in lib/content.ts). */
+export default function Hero({ title, tagline, subtitle, primaryLabel, secondaryLabel, imageSrc, customImage }: HeroProps) {
   const reduce = useReducedMotion();
 
   const container = {
@@ -23,12 +36,12 @@ export default function Hero() {
   return (
     <section className="relative min-h-[88vh] min-h-[88svh] flex items-end overflow-hidden bg-navy">
       <Image
-        src="/church-building.jpg"
-        alt="Covenant Baptist Church building, Byazhin-Kubwa, Abuja"
+        src={imageSrc}
+        alt=""
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[78%_35%]"
+        className={customImage ? "object-cover" : "object-cover object-[78%_35%]"}
       />
       <div
         className="absolute inset-0"
@@ -57,21 +70,21 @@ export default function Hero() {
       >
         <motion.h1 variants={item} className="text-parchment max-w-[720px]">
           <span className="block text-[clamp(2.1rem,5.6vw,4rem)] font-semibold tracking-tight font-serif leading-[1.08]">
-            Covenant Baptist Church
+            {title}
           </span>
         </motion.h1>
         <motion.p
           variants={item}
           className="mt-2 text-[13px] font-semibold tracking-[0.24em] uppercase text-gold-light"
         >
-          Byazhin-Kubwa, Abuja
+          {tagline}
         </motion.p>
 
         <motion.p
           variants={item}
           className="mt-5 max-w-[52ch] text-[clamp(1rem,1.9vw,1.15rem)] leading-relaxed text-parchment/90"
         >
-          Know Christ deeply. Live in the power of His resurrection. Share in the fellowship of His sufferings.
+          {subtitle}
         </motion.p>
 
         <motion.div variants={item} className="flex flex-wrap gap-3 mt-8">
@@ -79,13 +92,13 @@ export default function Hero() {
             href="/visit"
             className="inline-flex items-center px-7 py-3.5 rounded text-[13px] font-bold tracking-wide uppercase bg-gold text-navy hover:bg-gold-light transition"
           >
-            Plan Your Visit
+            {primaryLabel}
           </Link>
           <Link
             href="/teachings"
             className="inline-flex items-center px-7 py-3.5 rounded text-[13px] font-bold tracking-wide uppercase border border-parchment/40 text-parchment hover:border-gold hover:text-gold-light transition"
           >
-            Watch a Sermon
+            {secondaryLabel}
           </Link>
         </motion.div>
       </motion.div>

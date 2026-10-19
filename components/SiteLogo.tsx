@@ -15,16 +15,18 @@ export default function SiteLogo({
   size,
   className = "",
   priority = false,
+  alt = "Covenant Baptist Church logo",
 }: {
   src?: string | null;
   size: number;
   className?: string;
   priority?: boolean;
+  alt?: string;
 }) {
   return (
     <Image
       src={src || DEFAULT_LOGO}
-      alt="Covenant Baptist Church logo"
+      alt={alt}
       width={size}
       height={size}
       priority={priority}

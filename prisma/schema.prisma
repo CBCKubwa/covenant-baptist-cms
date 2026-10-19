@@ -333,12 +333,32 @@ model SiteSettings {
   statementOfFaith String?  @db.Text
   officeHours      String?
 
-  heroTitle      String?
-  heroSubtitle   String?
-  heroImageUrl   String?
+  // Homepage banner (Admin -> Pages). null = built-in wording / picture.
+  heroTitle          String?
+  heroTagline        String?
+  heroSubtitle       String?
+  heroPrimaryLabel   String?
+  heroSecondaryLabel String?
+  heroImageUrl       String?
+  // Browser-tab icon. null = bundled /favicon.jpg
+  faviconUrl     String?
+  // About page -> Leadership. null = built-in name / photo.
+  pastorName     String?
+  pastorTitle    String?
+  pastorPhotoUrl String?
+  // Footer copyright line; "{year}" becomes the current year. null = built-in line.
+  copyrightText  String?
+  // Line shown under the church name in the header, footer and login page. null = built-in.
+  churchLocation String?
+  // Search-engine title/description per page, keyed by path: { "/about": { "title": "...", "description": "..." } }
+  seo            Json?
+  // Menu label overrides keyed by link, e.g. { "/about": "Our Story", "cta": "Visit Us" }.
+  navLabels      Json?
   // Church logo shown in the site header, footer, admin and login page.
   // null = fall back to the bundled /cbc-logo.png
   logoUrl        String?
+  // Picture at the top of the Plan Your Visit page. null = bundled /church-building.jpg
+  visitImageUrl  String?
   // Editable text blocks (Admin -> Pages). null = use the built-in wording.
   homeIntro         String? @db.Text
   aboutIntro        String? @db.Text

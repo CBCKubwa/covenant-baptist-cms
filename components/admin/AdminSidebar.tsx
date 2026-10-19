@@ -37,21 +37,28 @@ const GROUPS: Group[] = [
   },
   {
     label: "Settings",
-    items: [{ label: "Church Info & Logo", href: "/admin/settings" }],
+    items: [
+      { label: "Church Info & Logo", href: "/admin/settings" },
+      { label: "Menu & Footer", href: "/admin/menu-footer" },
+      { label: "Search Appearance", href: "/admin/search-appearance" },
+    ],
   },
 ];
 
 export default function AdminSidebar({
   logoUrl,
   userName,
+  churchName,
   unread = {},
 }: {
   logoUrl: string;
   userName: string;
+  /** Shown under the logo, so the admin matches the website. */
+  churchName: string;
   /** Unread counts keyed by link href, e.g. { "/admin/messages": 3 } */
   unread?: Record<string, number>;
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? ""; // safe fallback: never crash if the path is unavailable
 
   // Highlight a section for its list page AND its sub-pages (e.g. /admin/albums/123).
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -59,9 +66,9 @@ export default function AdminSidebar({
   return (
     <aside className="w-full md:w-[240px] shrink-0 bg-midnight text-parchment/70 p-5 md:sticky md:top-0 md:h-screen md:overflow-y-auto flex flex-col">
       <Link href="/admin" className="flex items-center gap-3 mb-7">
-        <SiteLogo src={logoUrl} size={40} className="shrink-0" />
-        <span className="leading-tight">
-          <span className="block text-[13px] font-semibold text-parchment">Covenant Baptist</span>
+        <SiteLogo src={logoUrl} size={40} className="shrink-0" alt={`${churchName} logo`} />
+        <span className="leading-tight min-w-0">
+          <span className="block text-[13px] font-semibold text-parchment">{churchName}</span>
           <span className="block text-[11px] text-gold-light/80">Admin Portal</span>
         </span>
       </Link>

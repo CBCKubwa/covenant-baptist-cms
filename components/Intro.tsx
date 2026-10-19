@@ -2,6 +2,7 @@ import Image from "next/image";
 import Reveal from "./Reveal";
 import { pageContent } from "@/lib/content";
 import { getSiteSettings } from "@/lib/settings";
+import { resolveIdentity } from "@/lib/site-content";
 
 /** Homepage "Who We Are" block. The paragraph is editable in Admin -> Pages. */
 export default async function Intro() {
@@ -25,7 +26,7 @@ export default async function Intro() {
         <Reveal delay={0.15} className="relative aspect-[4/3] rounded-sm overflow-hidden">
           <Image
             src="/choir.jpg"
-            alt="The Covenant Baptist Sanctuary Choir at Covenant Baptist Church"
+            alt={`The Sanctuary Choir at ${resolveIdentity(settings).name}`}
             fill
             sizes="(min-width: 768px) 40vw, 100vw"
             className="object-cover object-[center_28%]"

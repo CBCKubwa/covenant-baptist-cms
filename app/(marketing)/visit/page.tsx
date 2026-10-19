@@ -1,23 +1,25 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
-import { church, pageContent } from "@/lib/content";
-import { getSiteSettings } from "@/lib/settings";
+import { pageContent } from "@/lib/content";
+import { getSiteSettings, resolveContact } from "@/lib/settings";
+import { resolveIdentity } from "@/lib/site-content";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Plan Your Visit | Covenant Baptist Church",
-  description: "Everything you need to know before visiting Covenant Baptist Church, Byazhin-Kubwa, Abuja.",
-};
+/** Search-engine title/description: editable in Admin -> Search Appearance. */
+export const generateMetadata = () => pageMetadata("/visit");
 
 export default async function VisitPage() {
   // Address, service times and the welcome text come from Admin -> Church Info / Pages when set.
   const settings = await getSiteSettings();
-  const address = settings?.address || church.address;
-  const whatsapp = (settings?.whatsapp || church.whatsapp).replace(/\D/g, "");
-  const mapHref = settings?.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  const { address, whatsapp, mapsUrl: mapHref } = resolveContact(settings);
+  const identity = resolveIdentity(settings);
+
+  // Admin-uploaded photo, or the bundled church-building photo. The bundled one is
+  // cropped toward the building's sign; uploaded photos are simply centred.
+  const customImage = settings?.visitImageUrl;
 
   return (
     <>
@@ -30,11 +32,11 @@ export default async function VisitPage() {
         <div className="max-w-[900px] mx-auto">
           <Reveal className="relative aspect-[16/9] rounded-sm overflow-hidden mb-12">
             <Image
-              src="/church-building.jpg"
-              alt="Covenant Baptist Church building, Byazhin-Kubwa, Abuja"
+              src={customImage || "/church-building.jpg"}
+              alt={customImage ? identity.name : `${identity.name} building, ${identity.location}`}
               fill
               sizes="(min-width: 900px) 900px, 100vw"
-              className="object-cover object-[78%_35%]"
+              className={customImage ? "object-cover" : "object-cover object-[78%_35%]"}
             />
           </Reveal>
 
