@@ -6,6 +6,7 @@ import { getAdminSession, unauthorized } from "@/lib/auth";
 import { deleteBlobs } from "@/lib/blob";
 import { cleanHttpUrl, cleanString, cleanUploadedUrl } from "@/lib/validation";
 import { parseNavLabels, parseSeo, withRequiredDefaults } from "@/lib/site-content";
+import { normalizeWhatsApp } from "@/lib/whatsapp";
 
 /** Settings that hold an uploaded picture. Replacing one deletes the old file from storage. */
 const IMAGE_FIELDS = ["logoUrl", "visitImageUrl", "heroImageUrl", "pastorPhotoUrl", "faviconUrl"] as const;
@@ -15,7 +16,7 @@ const URL_FIELDS = ["googleMapsUrl", "website", "facebook", "instagram", "youtub
 
 /** Plain-text settings an admin may edit. Anything else in the request is ignored. */
 const TEXT_FIELDS = [
-  "churchName", "churchLocation", "address", "phone", "whatsapp", "email", "visionShort", "visionFull", "missionStatement",
+  "churchName", "churchLocation", "address", "phone", "email", "visionShort", "visionFull", "missionStatement",
   "description", "whoWeAre", "ourStory", "history", "coreValues", "statementOfFaith",
   "officeHours", "homeIntro", "aboutIntro", "visitWhatToExpect", "serviceTimes",
   "heroTitle", "heroTagline", "heroSubtitle", "heroPrimaryLabel", "heroSecondaryLabel",
@@ -26,7 +27,7 @@ const TEXT_FIELDS = [
 const TEXT_LIMITS: Record<string, number> = {
   heroTitle: 120, heroTagline: 80, heroSubtitle: 300, heroPrimaryLabel: 30, heroSecondaryLabel: 30,
   pastorName: 120, pastorTitle: 120, copyrightText: 200,
-  address: 300, phone: 40, whatsapp: 40, email: 200, churchName: 120, churchLocation: 80,
+  address: 300, phone: 40, email: 200, churchName: 120, churchLocation: 80,
 };
 
 export async function GET() {
@@ -54,6 +55,19 @@ export async function PUT(request: Request) {
   const data: Record<string, string | null> = {};
   for (const key of TEXT_FIELDS) {
     if (key in body) data[key] = cleanString(body[key], TEXT_LIMITS[key] ?? 5000);
+  }
+
+  // WhatsApp: a number OR a link. Saved as one clean https link ("0703 137 5406" -> https://wa.me/2347031375406);
+  // blank = use the built-in number. Anything that is not a real WhatsApp number/link is rejected.
+  if ("whatsapp" in body) {
+    const raw = cleanString(body.whatsapp, 500);
+    if (!raw) {
+      data.whatsapp = null;
+    } else {
+      const result = normalizeWhatsApp(raw);
+      if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 });
+      data.whatsapp = result.url;
+    }
   }
 
   // Links must be real http(s) addresses (they become clickable on the public site).

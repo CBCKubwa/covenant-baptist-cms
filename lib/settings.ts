@@ -3,6 +3,7 @@ import { cache } from "react";
 import type { SiteSettings } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { church } from "@/lib/content";
+import { whatsappUrlFromStored } from "@/lib/whatsapp";
 
 /** Logo bundled with the project (public/cbc-logo.png). Used until the admin uploads a new one. */
 export const DEFAULT_LOGO = "/cbc-logo.png";
@@ -42,8 +43,8 @@ export type ContactDetails = {
   phone: string;
   /** `tel:` link for the phone number */
   phoneHref: string;
-  /** WhatsApp number, digits only (for wa.me links) */
-  whatsapp: string;
+  /** Ready-to-use link for every "Message on WhatsApp" button (a chat link, Business link or invite link) */
+  whatsappUrl: string;
   email: string | null;
   mapsUrl: string;
   social: Array<{ label: string; url: string }>;
@@ -61,7 +62,7 @@ export function resolveContact(settings: SiteSettings | null): ContactDetails {
     address,
     phone,
     phoneHref: `tel:${phone.replace(/[^\d+]/g, "")}`,
-    whatsapp: (settings?.whatsapp || church.whatsapp).replace(/\D/g, ""),
+    whatsappUrl: whatsappUrlFromStored(settings?.whatsapp, church.whatsapp),
     email: settings?.email || church.email || null,
     mapsUrl: safeUrl(settings?.googleMapsUrl) || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`,
     social: [

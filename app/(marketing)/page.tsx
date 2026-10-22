@@ -5,7 +5,7 @@ import WeeklyWord from "@/components/WeeklyWord";
 import FeaturedSermon from "@/components/FeaturedSermon";
 import { featuredSermon, weeklyWordSample } from "@/lib/content";
 import { getCurrentWeeklyWord, getPublishedSermons } from "@/lib/queries";
-import { getSiteSettings } from "@/lib/settings";
+import { getSiteSettings, resolveContact } from "@/lib/settings";
 import { resolveHero, resolveIdentity } from "@/lib/site-content";
 import { formatWeekRange } from "@/lib/week";
 
@@ -31,7 +31,7 @@ export default async function Home() {
       <Hero {...resolveHero(settings)} />
       <Intro />
       <SundayInfo />
-      {word && <WeeklyWord word={word} churchName={resolveIdentity(settings).name} />}
+      {word && <WeeklyWord word={word} churchName={resolveIdentity(settings).name} whatsappUrl={resolveContact(settings).whatsappUrl} />}
       {sermon && <FeaturedSermon sermon={sermon} />}
     </>
   );

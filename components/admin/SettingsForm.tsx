@@ -3,6 +3,8 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import FormField from "./FormField";
+import { normalizeWhatsApp } from "@/lib/whatsapp";
+import { church } from "@/lib/content";
 
 type FormState = {
   churchName: string;
@@ -16,6 +18,30 @@ type FormState = {
   youtube: string;
   instagram: string;
 };
+
+/**
+ * Shows exactly what the WhatsApp buttons will open, and lets the admin test it BEFORE saving.
+ * Uses the same rules as the server (lib/whatsapp.ts), so what you see here is what gets saved.
+ */
+function WhatsAppPreview({ value }: { value: string }) {
+  if (!value.trim()) {
+    const fallback = normalizeWhatsApp(church.whatsapp);
+    return (
+      <p className="mt-1.5 text-xs text-ink-soft">
+        Blank = the built-in number{fallback.ok ? <> (<a href={fallback.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-navy">test</a>)</> : null}. You can paste a WhatsApp link
+        (<code className="bg-parchment px-1 rounded">https://wa.me/…</code>, a WhatsApp Business link or a group invite link) or just type the number.
+      </p>
+    );
+  }
+  const result = normalizeWhatsApp(value);
+  if (!result.ok) return <p role="alert" className="mt-1.5 text-xs text-red-600">{result.error}</p>;
+  return (
+    <p className="mt-1.5 text-xs text-ink-soft break-all">
+      The WhatsApp buttons will open: <strong className="text-navy">{result.url}</strong>{" "}
+      <a href={result.url} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap underline underline-offset-2 text-navy">Test it ↗</a>
+    </p>
+  );
+}
 
 /** Contact details & social links. `initial` is loaded from the database by the page. */
 export default function SettingsForm({ initial }: { initial: FormState }) {
@@ -56,7 +82,15 @@ export default function SettingsForm({ initial }: { initial: FormState }) {
       <h2 className="font-serif text-lg text-navy -mb-1 mt-2">Contact details</h2>
       <FormField label="Address" value={form.address} onChange={update("address")} />
       <FormField label="Phone" value={form.phone} onChange={update("phone")} />
-      <FormField label="WhatsApp number (digits only, with country code)" value={form.whatsapp} onChange={update("whatsapp")} placeholder="2347031375406" />
+      <div>
+        <FormField
+          label="WhatsApp link or number (opens when someone taps a WhatsApp button)"
+          value={form.whatsapp}
+          onChange={update("whatsapp")}
+          placeholder="https://wa.me/2347031375406  or  0703 137 5406"
+        />
+        <WhatsAppPreview value={form.whatsapp} />
+      </div>
       <FormField label="Email" value={form.email} onChange={update("email")} placeholder="Add your church email" />
       <FormField label="Google Maps link" value={form.googleMapsUrl} onChange={update("googleMapsUrl")} placeholder="Paste a Google Maps link" />
       <FormField label="Facebook page" value={form.facebook} onChange={update("facebook")} placeholder="https://facebook.com/..." />

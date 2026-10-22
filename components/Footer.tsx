@@ -85,7 +85,7 @@ export default function Footer({ logoUrl, contact, vision, navItems = defaultNav
             <li className="flex gap-2.5 mb-4 text-sm">
               <MessageCircle size={15} className="shrink-0 text-gold" />
               <a
-                href={`https://wa.me/${contact.whatsapp}`}
+                href={contact.whatsappUrl}
                 target="_blank"
                 rel="noopener"
                 className="hover:text-gold-light transition"

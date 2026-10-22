@@ -39,7 +39,7 @@ export default async function ContactPage() {
               </li>
               <li className="flex gap-3 text-sm text-ink-soft">
                 <MessageCircle size={16} className="shrink-0 text-gold" />
-                <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener" className="text-navy">
+                <a href={contact.whatsappUrl} target="_blank" rel="noopener" className="text-navy">
                   Message on WhatsApp
                 </a>
               </li>
@@ -64,7 +64,7 @@ export default async function ContactPage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <ContactForm whatsapp={contact.whatsapp} />
+            <ContactForm whatsappUrl={contact.whatsappUrl} />
           </Reveal>
         </div>
       </section>

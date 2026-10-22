@@ -11,9 +11,19 @@ export type WeeklyWordData = {
 };
 
 /** Homepage section: the quote, question and prayer for the current week. */
-export default function WeeklyWord({ word, churchName = church.name }: { word: WeeklyWordData; churchName?: string }) {
+export default function WeeklyWord({
+  word,
+  churchName = church.name,
+  whatsappUrl,
+}: {
+  word: WeeklyWordData;
+  churchName?: string;
+  /** The church's WhatsApp chat link (Admin -> Church Info & Logo). */
+  whatsappUrl: string;
+}) {
   const shareText = `\u201C${word.quote}\u201D${word.quoteBy ? ` \u2014 ${word.quoteBy}` : ""}, ${churchName}`;
-  const waHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+  // Opens WhatsApp's "choose who to send this to" screen with the quote filled in (NOT the church chat).
+  const shareHref = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 
   return (
     <section id="weekly" className="bg-white py-16 md:py-28">
@@ -65,7 +75,7 @@ export default function WeeklyWord({ word, churchName = church.name }: { word: W
             Read This Week&rsquo;s Word
           </a>
           <a
-            href={waHref}
+            href={whatsappUrl}
             target="_blank"
             rel="noopener"
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded text-[12.5px] font-semibold border transition hover:-translate-y-0.5"
@@ -74,9 +84,14 @@ export default function WeeklyWord({ word, churchName = church.name }: { word: W
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.8 14.2c-.3.7-1.4 1.3-2 1.4-.5.1-1.2.2-3.6-.8-3-1.2-5-4.2-5.1-4.4-.2-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.7 1.6.3.1.5.1.7-.1l.6-.7c.2-.3.4-.2.7-.1l1.7.8c.2.1.4.2.5.3.1.2.1.9-.2 1.6z" />
             </svg>
-            WhatsApp
+            Chat with us on WhatsApp
           </a>
         </div>
+        <p className="mt-5 text-center text-[12.5px] text-ink-soft">
+          <a href={shareHref} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-navy transition">
+            Share this word on WhatsApp
+          </a>
+        </p>
       </div>
     </section>
   );

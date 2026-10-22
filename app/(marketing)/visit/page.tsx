@@ -14,7 +14,7 @@ export const generateMetadata = () => pageMetadata("/visit");
 export default async function VisitPage() {
   // Address, service times and the welcome text come from Admin -> Church Info / Pages when set.
   const settings = await getSiteSettings();
-  const { address, whatsapp, mapsUrl: mapHref } = resolveContact(settings);
+  const { address, whatsappUrl, mapsUrl: mapHref } = resolveContact(settings);
   const identity = resolveIdentity(settings);
 
   // Admin-uploaded photo, or the bundled church-building photo. The bundled one is
@@ -77,7 +77,7 @@ export default async function VisitPage() {
                 Get Directions
               </a>
               <a
-                href={`https://wa.me/${whatsapp}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener"
                 className="inline-flex items-center px-6 py-3 rounded border border-navy/20 text-navy text-xs font-bold tracking-wide uppercase hover:border-navy transition"
