@@ -34,6 +34,7 @@ export default async function TeachingsPage() {
               {sermons.map((s) => (
                 <SermonCard
                   key={s.id}
+                  slug={s.slug}
                   title={s.title}
                   speaker={s.speaker.name}
                   scripture={s.scripture}

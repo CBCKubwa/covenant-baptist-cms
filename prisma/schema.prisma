@@ -370,6 +370,17 @@ model SiteSettings {
 }
 // Counters used to throttle login attempts and public form submissions.
 // `key` is a hashed identifier (never a raw IP); rows expire at `resetAt`.
+// The church's current live broadcast (one row only).
+model LiveStream {
+  id           String   @id @default("singleton")
+  title        String   @default("Live Service")
+  description  String?  @db.Text
+  streamUrl    String?
+  isLive       Boolean  @default(false)
+  scheduledFor DateTime?
+  updatedAt    DateTime @updatedAt
+}
+
 model RateLimit {
   key     String   @id
   count   Int      @default(0)

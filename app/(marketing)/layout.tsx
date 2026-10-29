@@ -1,5 +1,6 @@
 import SiteHeader from "@/components/SiteHeader";
 import Footer from "@/components/Footer";
+import LiveNowBadge from "@/components/LiveNowBadge";
 import { getSiteSettings, resolveContact, resolveLogo } from "@/lib/settings";
 import { resolveCopyright, resolveIdentity, resolveNav } from "@/lib/site-content";
 
@@ -38,6 +39,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
         copyright={resolveCopyright(settings)}
         churchName={identity.name}
       />
+      <LiveNowBadge />
     </>
   );
 }

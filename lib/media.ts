@@ -11,7 +11,7 @@ export function getYouTubeEmbedUrl(url: string | null | undefined): string | nul
     if (host === "youtu.be") id = u.pathname.slice(1);
     else if (host === "youtube.com" || host === "m.youtube.com") {
       if (u.pathname === "/watch") id = u.searchParams.get("v");
-      else if (u.pathname.startsWith("/embed/") || u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2];
+      else if (u.pathname.startsWith("/embed/") || u.pathname.startsWith("/shorts/") || u.pathname.startsWith("/live/") || u.pathname.startsWith("/live/") || u.pathname.startsWith("/live/")) id = u.pathname.split("/")[2];
     }
     return id && /^[\w-]{6,15}$/.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
   } catch {

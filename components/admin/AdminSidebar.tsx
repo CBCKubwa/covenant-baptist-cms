@@ -24,6 +24,7 @@ const GROUPS: Group[] = [
   {
     label: "Media",
     items: [
+           { label: "Live Stream", href: "/admin/live" },
       { label: "Photos & Albums", href: "/admin/albums" },
       { label: "Video & Audio", href: "/admin/video-audio" },
     ],

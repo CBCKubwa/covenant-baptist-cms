@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import AdminPageHeader, { DbError } from "@/components/admin/AdminPageHeader";
 import DeleteButton from "@/components/admin/DeleteButton";
+import ShareButton from "@/components/ShareButton";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,7 @@ export default async function SermonsAdminPage() {
                 <th className="px-5 py-3 font-semibold hidden md:table-cell">Speaker</th>
                 <th className="px-5 py-3 font-semibold hidden sm:table-cell">Date</th>
                 <th className="px-5 py-3 font-semibold">Media</th>
-                <th className="px-5 py-3 w-14"><span className="sr-only">Actions</span></th>
+                <th className="px-5 py-3 w-40"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
@@ -57,7 +58,7 @@ export default async function SermonsAdminPage() {
                     </div>
                   </td>
                   <td className="px-3 py-3 text-right">
-                    <DeleteButton endpoint={`/api/admin/sermons/${s.id}`} itemName={s.title} />
+                    <div className="flex items-center justify-end gap-2"><ShareButton url={`/teachings/${s.slug}`} title={s.title} message={`${s.speaker.name} · ${s.scripture}`} size="sm" /><div className="flex items-center justify-end gap-2"><ShareButton url={`/teachings/${s.slug}`} title={s.title} message={`${s.speaker.name} · ${s.scripture}`} size="sm" /><DeleteButton endpoint={`/api/admin/sermons/${s.id}`} itemName={s.title} /></div></div>
                   </td>
                 </tr>
               ))}

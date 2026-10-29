@@ -70,3 +70,9 @@ lib/queries.ts          database reads for the public site
 proxy.ts                blocks /admin and /api/admin unless signed in
 prisma/                 schema + seed
 ```
+
+## Live streaming and shareable media pages
+
+The site supports an embedded live broadcast from a public YouTube Live or Facebook Live URL. After deploying the code, run `npm run db:push` against the configured database so Prisma creates the `LiveStream` table, then deploy/restart the app. Sign in to Admin and open **Media → Live Stream** to paste the stream URL, set the title, and start/end the website broadcast. The website does not itself encode or transmit video; the media team must start the broadcast on YouTube or Facebook first.
+
+Sermons have shareable `/teachings/<slug>` pages and standalone video/audio items have `/media/<id>` pages. Set `NEXTAUTH_URL` (or `NEXT_PUBLIC_SITE_URL`) to the public HTTPS site origin so social preview metadata uses absolute URLs. Test with a public or unlisted stream before a live service, and confirm WhatsApp/Facebook preview cards after deployment.

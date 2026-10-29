@@ -2,6 +2,7 @@ import { FileAudio, FileVideo } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import AdminPageHeader, { DbError } from "@/components/admin/AdminPageHeader";
 import DeleteButton from "@/components/admin/DeleteButton";
+import ShareButton from "@/components/ShareButton";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ export default async function AdminVideoAudioPage() {
                 <th className="px-5 py-3 font-semibold">Title</th>
                 <th className="px-5 py-3 font-semibold">Type</th>
                 <th className="px-5 py-3 font-semibold hidden sm:table-cell">Added</th>
-                <th className="px-5 py-3 w-14"><span className="sr-only">Actions</span></th>
+                <th className="px-5 py-3 w-40"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
@@ -56,7 +57,7 @@ export default async function AdminVideoAudioPage() {
                   </td>
                   <td className="px-5 py-4 text-ink-soft hidden sm:table-cell">{item.createdAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</td>
                   <td className="px-3 py-3 text-right">
-                    <DeleteButton endpoint={`/api/admin/media/${item.id}`} itemName={item.title} />
+                    <div className="flex items-center justify-end gap-2"><ShareButton url={`/media/${item.id}`} title={item.title} size="sm" /><div className="flex items-center justify-end gap-2"><ShareButton url={`/media/${item.id}`} title={item.title} size="sm" /><DeleteButton endpoint={`/api/admin/media/${item.id}`} itemName={item.title} /></div></div>
                   </td>
                 </tr>
               ))}

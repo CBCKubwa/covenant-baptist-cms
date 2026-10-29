@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import ShareButton from "./ShareButton";
 import PhotoGrid from "./PhotoGrid";
 import { getYouTubeEmbedUrl } from "@/lib/media";
 
@@ -76,9 +78,9 @@ export default function MediaTabs({ albums, videos, audios }: { albums: AlbumVie
                   ) : (
                     <video controls preload="metadata" src={v.url} className="w-full aspect-video rounded-sm bg-black" />
                   )}
-                  <figcaption className="mt-2.5">
-                    <div className="font-serif text-navy">{v.title}</div>
-                    {v.description && <p className="text-[13px] text-ink-soft mt-0.5">{v.description}</p>}
+                  <figcaption className="mt-2.5 flex items-start justify-between gap-3">
+                    <div className="min-w-0"><Link href={`/media/${v.id}`} className="font-serif text-navy hover:underline underline-offset-2">{v.title}</Link>{v.description && <p className="text-[13px] text-ink-soft mt-0.5">{v.description}</p>}</div>
+                    <ShareButton url={`/media/${v.id}`} title={v.title} size="sm" />
                   </figcaption>
                 </figure>
               );
@@ -93,8 +95,7 @@ export default function MediaTabs({ albums, videos, audios }: { albums: AlbumVie
           <div className="grid gap-4 max-w-[640px]">
             {audios.map((a) => (
               <div key={a.id} className="border border-navy/10 rounded-sm p-4">
-                <div className="font-serif text-navy">{a.title}</div>
-                {a.description && <p className="text-[13px] text-ink-soft mt-0.5">{a.description}</p>}
+                <div className="flex items-start justify-between gap-3"><div className="min-w-0"><Link href={`/media/${a.id}`} className="font-serif text-navy hover:underline underline-offset-2">{a.title}</Link>{a.description && <p className="text-[13px] text-ink-soft mt-0.5">{a.description}</p>}</div><ShareButton url={`/media/${a.id}`} title={a.title} size="sm" /></div>
                 <audio controls preload="none" src={a.url} className="w-full mt-3" aria-label={`Audio: ${a.title}`} />
               </div>
             ))}

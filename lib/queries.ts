@@ -40,6 +40,21 @@ export function getPublishedAlbums() {
   );
 }
 
+export function getSermonBySlug(slug: string) {
+  return safe("sermon", () =>
+    prisma.sermon.findFirst({ where: { slug, publishedAt: { not: null } }, include: { speaker: true } })
+  );
+}
+
+export function getMediaItemById(id: string) {
+  return safe("media item", () => prisma.mediaItem.findUnique({ where: { id } }));
+}
+
+/** Current live-stream record; null is treated as offline. */
+export function getLiveStream() {
+  return safe("live stream", () => prisma.liveStream.findUnique({ where: { id: "singleton" } }));
+}
+
 export function getMediaItems() {
   return safe("media", () => prisma.mediaItem.findMany({ orderBy: { createdAt: "desc" } }));
 }

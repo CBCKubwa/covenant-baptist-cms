@@ -3,6 +3,7 @@ import "./globals.css";
 import { FAVICON_DEFAULT } from "@/lib/content";
 import { getSiteSettings, resolveContact } from "@/lib/settings";
 import { resolveIdentity, resolveSeo } from "@/lib/site-content";
+import { getSiteUrl } from "@/lib/site-url";
 
 /**
  * Site-wide metadata. Everything here follows the admin's settings:
@@ -18,6 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const home = resolveSeo(settings, "/");
   const icon = settings?.faviconUrl || FAVICON_DEFAULT;
   return {
+    metadataBase: new URL(getSiteUrl()),
     title: { default: home.title, template: `%s | ${identity.name}` },
     description: home.description,
     openGraph: { title: home.title, description: home.description, type: "website" },
